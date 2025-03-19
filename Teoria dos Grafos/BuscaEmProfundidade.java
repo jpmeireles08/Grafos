@@ -78,23 +78,19 @@ public class BuscaEmProfundidade {
         t += 1;
         td[v] = t;
 
-        int numVizinhos = pointer[v+1] - pointer[v];
+        int numVizinhos = pointer[v] - pointer[v-1];
+        System.out.println(numVizinhos);
+        int[] vizinhos = new int[numVizinhos];
+        for (int i = 0; i < numVizinhos; i++) {
+            vizinhos[i] = destino[pointer[v-1] + i];
+        }
 
-        
-        int menor = destino[pointer[v]];
         for (int i = 0; i < numVizinhos; i++) {
             
-        
-            if (menor > destino[pointer[v] + i]) {
-                menor = destino[pointer[v] + i];
-            }
-
-            if (td[menor] == 0) {
-                pai[menor] = v;
-                System.out.println("Aresta de arvore: (" + v + " -> " + menor + ")");
-                buscarEmProfundidade(menor);
-            } else if (tt[menor] == 0 && menor != pai[v]) {
-
+            if (td[vizinhos[i]] == 0) {
+                pai[vizinhos[i]] = v;
+                System.out.println("Aresta de arvore: (" + v + " -> " + vizinhos[i] + ")");
+                buscarEmProfundidade(vizinhos[i]);
             }
         }
 
@@ -103,8 +99,8 @@ public class BuscaEmProfundidade {
     }
 
     public static int verticeTDZero (int[] TD) {
-        for (int i = 0; i < td.length; i++) {
-            if (td[i] == 0) {
+        for (int i = 1; i < TD.length; i++) {
+            if (TD[i] == 0) {
                 return i;
                 
             }
