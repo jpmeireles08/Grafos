@@ -13,7 +13,7 @@ public class BuscaEmProfundidade {
     public static int numVertices;
     public static int numArestas;
 
-    public static void ler (File nomeArq) throws FileNotFoundException {
+    public static void ler(File nomeArq) throws FileNotFoundException {
         Scanner sc = new Scanner(nomeArq);
 
         numVertices = sc.nextInt();
@@ -23,9 +23,9 @@ public class BuscaEmProfundidade {
         destino = new int[numArestas];
 
         int k = 0;
-        
+
         while (sc.hasNext()) {
-            
+
             origem[k] = sc.nextInt();
             destino[k] = sc.nextInt();
             k++;
@@ -36,12 +36,12 @@ public class BuscaEmProfundidade {
         int aux = 0;
 
         for (int i = 0; i < origem.length; i++) {
-            if (i == 0 || origem[i] != origem[i-1]) {
+            if (i == 0 || origem[i] != origem[i - 1]) {
                 pointer[aux] = i;
                 aux++;
             }
         }
-        
+
         pointer[numVertices] = numArestas;
 
         sc.close();
@@ -53,8 +53,7 @@ public class BuscaEmProfundidade {
         busca(numVertices, numArestas);
     }
 
-    public static void busca (int numVertices, int numArestas) {
-        
+    public static void busca(int numVertices, int numArestas) {
 
         td = new int[numVertices];
         tt = new int[numVertices];
@@ -71,26 +70,28 @@ public class BuscaEmProfundidade {
         while ((v = verticeTDZero(td)) != -1) {
             buscarEmProfundidade(v);
         }
-        
+
     }
 
     public static void buscarEmProfundidade(int v) {
         t += 1;
         td[v] = t;
 
-        int numVizinhos = pointer[v] - pointer[v-1];
-        System.out.println(numVizinhos);
+        int numVizinhos = pointer[v+1] - pointer[v];
         int[] vizinhos = new int[numVizinhos];
         for (int i = 0; i < numVizinhos; i++) {
-            vizinhos[i] = destino[pointer[v-1] + i];
+            vizinhos[i] = destino[pointer[v] + i];
         }
 
         for (int i = 0; i < numVizinhos; i++) {
-            
-            if (td[vizinhos[i]] == 0) {
-                pai[vizinhos[i]] = v;
-                System.out.println("Aresta de arvore: (" + v + " -> " + vizinhos[i] + ")");
-                buscarEmProfundidade(vizinhos[i]);
+
+            if (td[vizinhos[i] - 1] == 0) {
+                pai[vizinhos[i] - 1] = v;
+                System.out.println("Aresta de arvore: (" + (v + 1) + " -> " + vizinhos[i] + ")");
+                buscarEmProfundidade(vizinhos[i] - 1);
+
+            } else if (tt[vizinhos[i] - 1] == 0) {
+                System.out.println("Aresta de retorno: (" + (v + 1) + " -> " + vizinhos[i] + ")");
             }
         }
 
@@ -98,18 +99,18 @@ public class BuscaEmProfundidade {
         tt[v] = t;
     }
 
-    public static int verticeTDZero (int[] TD) {
-        for (int i = 1; i < TD.length; i++) {
+    public static int verticeTDZero(int[] TD) {
+        for (int i = 0; i < TD.length; i++) {
             if (TD[i] == 0) {
                 return i;
-                
+
             }
         }
         return -1;
     }
 
-    public static void main (String[] args) throws FileNotFoundException {
-        
+    public static void main(String[] args) throws FileNotFoundException {
+
         Scanner sc = new Scanner(System.in);
 
         System.out.print("Insira o nome do arquivo: ");
